@@ -127,8 +127,9 @@ router.get('/updateOneUser_Entity', function (req, res) {
 router.get('/process_get', function (req, res) {
 	// 输出 JSON 格式
 	response = {
-		first_name : req.query.first_name,
-		last_name : req.query.last_name
+		name : req.query.name,
+		Ugroup : req.query.Ugroup,
+		tmpcol:"aabbcc"
 	};
 	console.log(response);
 	// res.end(JSON.stringify(response));
@@ -163,8 +164,9 @@ router.get('/process_get', function (req, res) {
 	/*end*/
 
 	// res.end(JSON.stringify(response));
-	res.render('runoob_index', {
-		title : JSON.stringify(response)
+	res.render('homePage', {
+		//title : JSON.stringify(response)
+		title : response
 	}); //response will be showed in a ejs page
 })
 
@@ -241,7 +243,10 @@ router.get('/user2/:id', function (req, res, next) {
 /* GET home page. */
 router.get('/', function (req, res) {
 	res.render('index', {
-		title : 'index'
+		title : 'MYdemo',
+		WellcomeMSG : 'Well come to my app',
+		LoginMSG : 'Please with your name and group',
+		registMSG : 'Regist new user'
 	});
 });
 
@@ -252,27 +257,47 @@ router.get('/login', function (req, res) {
 	});
 });
 
-
+router.get('/UserRPT', function (req, res) {
+	var userData={};
+	var names= ['foo', 'bar', 'baz']  ;
+    var articles = [  { title : 'title name', content : 'this is a test content!'},    
+		{title : 'title name', content : 'this is a test content!'} ];  	
+	user.find(function (err, persons) { //怎样做有条件的查询？ 第一个参数就是查询条件，去掉就是查询所有
+		//查询到的所有 person
+		//res.send(persons);//persons [{"_id":"58100d5dc44c23102407940c","name":"lvfei","Ugroup":"CA","tmpcol":"aabbcc"}]
+		//console.log(JSON.stringify(persons));
+//console.log(persons[0].toObject().Ugroup);
+		res.render('UserRPT', {
+		persons:persons,
+		articles:articles,
+		tmpSTR:JSON.stringify(persons)
+	});
+	});	
+});
+//JSON.stringify(persons)
 /* ucenter */
 router.post('/ucenter', function (req, res) {
 	var query = {
-		first_name : req.body.first_name,
-		last_name : req.body.last_name
+		name : req.body.name,
+		Ugroup : req.body.Ugroup
 	};
 	var longinUser = {
-		first_name : req.body.first_name,
-		last_name : req.body.last_name
+		name : req.body.name,
+		Ugroup : req.body.Ugroup
 	};
 	(function () {
-		user.count(query, function (err, doc) { //count返回集合中文档的数量，和 find 一样可以接收查询条件。query 表示查询的条件
-			if (doc == 1) {
+		user.count(query, function (err, total) { //count返回集合中文档的数量，和 find 一样可以接收查询条件。query 表示查询的条件
+			if (total == 1) {
 				console.log(query.name + ": successfully " + new Date());
-				res.render('ucenter', {
-					title : JSON.stringify(longinUser)
+				res.render('homePage', {
+					title : longinUser
 				});
 			} else {
-				console.log(query.name + ": failed " + new Date()+"\n"+"@@"+doc);
-				res.redirect('/');
+				console.log(query.name + ": failed " + new Date());
+				res.render('noAccessPage', {
+					title : JSON.stringify(longinUser)
+				});				
+				//res.redirect('/');
 			}
 		});
 	})(query);
@@ -283,6 +308,15 @@ router.get('/runoob_index', function (req, res) {
 		title : 'login'
 	});
 });
+
+
+router.get('/CreateNewUser', function (req, res) {
+	res.render('CreateNewUser', {
+		currentUserName : 'Name',currentUserGroup : 'Ugroup',
+	});
+});
+
+
 
 router.get('/runoob_index_post', function (req, res) {
 	res.render('runoob_index_post', {

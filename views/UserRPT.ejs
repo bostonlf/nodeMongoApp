@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>dd</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+  
+    <h1>Alluser@@55</h1>
+	
+	<% for(var i=0;i<persons.length;i++){ %>
+	
+	
+	<span><%= persons[i].name + persons[i].tmpcol %></span><br/>
+	
+	
+	
+	<% } %>
+	
+	
+<% if (persons) { %>  
+<table>  
+<thead>
+<th><td>ID</td><td>UserName</td><td>Group</td></th>
+</thead>
+<tbody>
+<% persons.forEach(function(name){ %> 
+<tr><td><%= name._id %></td><td><%= name.name %></td><td><%= name.Ugroup %></td></tr>
+<% }) %>  
+<% } %> 
+
+</tbody>
+</table>
+
+<%= tmpSTR %>   
+<%= persons[0].name + persons[0].Ugroup %>   
+<hr/>
+  
+
+<% articles.forEach(function(article) { %>  
+        <div class="panel">  
+            <h3><%= article.title %></h3>  
+            <div class="panel-body">  
+                <%= article.content %>  
+            </div>  
+        </div>  
+<% }) %>    
+  
+</html>

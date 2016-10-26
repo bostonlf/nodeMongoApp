@@ -3,9 +3,20 @@ var db = mongoose.connect('mongodb://localhost/lvfei');//；连接数据库  db�
 var Schema = mongoose.Schema;   //  创建模型
 var userScheMa = new Schema({
 	name: String,
-	password: String
+	password: String,
+	Ugroup: String,
+	tmpcol: String
 }); //  定义了一个新的模型，但是此模式还未和users集合有关联
-userScheMa.methods.speak = function () {
+//这里我犯过严重的错误，卡了两天
+/*
+为什么doc里读不到Ugroup这个属性，因为你没声明
+var userScheMa = new Schema({
+name: String,
+password: String,
+            Ugroup: String
+});
+*/
+userScheMa.methods.speak = function () {//为此Schema创建方法
   var greeting = this.name
     ? "Meow name is " + this.name
     : "I don't have a name";
