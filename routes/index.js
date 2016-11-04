@@ -31,6 +31,10 @@ router.get('/testsession', function (req, res) {
     }
 }); 
  
+router.get('/testAngularsHTTP', function (req, res) {
+res.send('2222');
+});  
+ 
  
  
  
