@@ -13,11 +13,21 @@
 			<br>
 			<input id="name" name="name" type="text">
 		</p>
-		<p>
-			<span>group:</span>
-			<br>
-			<input id="group" name="group" type="text">
-		</p>
+<p>
+<span>GroupLB:</span>
+<br>
+<select onchange="tmpJS(this)" id="Ugroup" name="Ugroup">	
+<option value="">allUserGroup</option>		
+
+<% for(var i=0;i<allUserGroup.length;i++){ %> 
+
+<option value="<%= allUserGroup[i] %>"><%= allUserGroup[i] %></option>
+
+<% } %> 
+
+</select>
+
+</p>
 		<p><input type="submit" value="submit"></p>
 	</form>
   </body>

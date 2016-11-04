@@ -1,0 +1,41 @@
+<html>
+<body>
+<title>Edit user page</title>
+<form action="http://127.0.0.1:3001/submit_editUser" method="GET">
+<h2>Create a new user</h2>
+<p>
+current user Name :<%=sessionUserINFO.currentUserName%>
+<br/>
+current user group :<%=sessionUserINFO.currentUserGroup%>
+</p>
+
+<p>
+<span>Name:</span>
+<br>
+<input id="name" name="name" value="<%=sessionUserINFO.currentUserName%>" type="text">
+</p>
+
+<p>
+<span>GroupLB:</span>
+<br>
+<select onchange="tmpJS(this)" id="Ugroup" name="Ugroup">	
+<option value="">allUserGroup</option>		
+
+<% for(var i=0;i<allUserGroup.length;i++){ %> 
+<% if(allUserGroup[i] == sessionUserINFO.currentUserGroup){ %> 
+<option selected="selected" value="<%= allUserGroup[i] %>"><%= allUserGroup[i] %></option>
+<% } else { %> 
+<option value="<%= allUserGroup[i] %>"><%= allUserGroup[i]%></option>
+<% } %> 
+<% } %> 
+
+</select>
+
+</p>		
+<p><input type="submit" value="submit"></p>
+</form>
+</body>
+</html>
+<script>
+function tmpJS(obj){alert(obj.value);}
+</script>

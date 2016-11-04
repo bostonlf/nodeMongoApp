@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var multer  = require('multer');
-
+var session = require('express-session');
 
 var app = express();
 
@@ -22,8 +22,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));//more INFO refer to  http://www.expressjs.com.cn/starter/static-files.html
 app.use(multer({ dest: '/tmp/'}).array('image'));
+app.use(session({
+    secret: 'hubwiz app', //secret的值建议使用随机字符串
+    cookie: {maxAge: 60 * 1000 * 30} // 过期时间（毫秒）
+}));
 //app.use 加载用于处理http請求的middleware（中间件），当一个请求来的时候，会依次被这些 middlewares处理。
 //就相当于一个中间件处理器，请求来了，让那些中间件先处理一遍
 

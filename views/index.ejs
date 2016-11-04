@@ -9,5 +9,9 @@
     <p><%= WellcomeMSG %></p>
 	<p><a href="/login"><%= LoginMSG %></p></p>
 	<p><a href="/CreateNewUser"><%= registMSG %></p></p>
+	<% if(sessionUserINFO.currentUserGroup=="CA"){ %>
+	<p><a href="/UserRPT"><%= UserRPTMSG %></p></p>
+	<% } %>
+	<p><%= sessionUserINFO.currentUserName %></p>
   </body>
 </html>

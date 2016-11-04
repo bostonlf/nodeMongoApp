@@ -1,19 +1,449 @@
+<!DOCTYPE html>
 <html>
-<body>
-<form action="http://127.0.0.1:3001/process_get" method="GET">
-currentUserName<%=currentUserName%><br/>
-currentUserGroup<%=currentUserGroup%>
+   <head>
+      <title>Bootstrap 模板</title>
+	  <!--为了让 Bootstrap 开发的网站对移动设备友好，确保适当的绘制和触屏缩放，需要在网页的 head 之中添加 viewport meta 标签-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- 引入 Bootstrap -->
+      <link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+      <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+      <!--[if lt IE 9]>
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <![endif]-->
+
+      <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
+      <script src="js/jquery-3.1.1.min.js"></script>
+      <!-- 包括所有已编译的插件 -->
+      <script src="js/bootstrap-3.3.7-dist/js/bootstrap.js"></script>	  
+	  <script src="js/angular.min.js"></script>	  
+	  
+<style>
+input.ng-dirty {
+    background-color: lightblue;
+}
+
+
+
+input.ng-invalid {
+    background-color: darkorange ;
+}
+
+
+</style>
+	  
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope,$rootScope) {
+//所有的应用都有一个 $rootScope，它可以作用在 ng-app 指令包含的所有 HTML 元素中。$rootScope 可作用于整个应用中。是各个 controller 中 scope 的桥梁。用 rootscope 定义的值，可以在各个 controller 中使用。
+	$rootScope.country = "China";
+    $scope.firstName= "fei";
+    $scope.lastName= "lv";
+	$scope.NodejsMSG="<%=NodejsMSG%>";
+	/**
+	这里卡了一上午，纠结如何把一个对象从nodejs传到前台
+	直接把对象传到页面好像不可行，最后解决方法是在nodejs把对象转为串，然后在页面上再给转成对象
+	用到的知识 https://cnodejs.org/topic/505bcced417be95272064f9e
+	注意：单引号写在{}外，每个属性名都必须用双引号，否则会抛出异常。
+	stringify()用于从一个对象解析出字符串
+	parse用于从一个字符串中解析出json对象
+	在 EJS (Embedded JavaScript) 模板系统中, 字符串输出时默认是经过escape转义编码的.
+	// 用=号输出,就会被escapge转义编码 
+	< %= VARIABLE_NAME % >
+	这种默认转义编码可能会带来麻烦, 比如我要输出一个 json 对象供客户端 javascirpt 使用, 或者想输出一些动态生成的 HTML 标签, 幸运的是EJS提供另一种输出方式:
+	// 用“-”输出原始内容, 不会被escape,
+	< %- VARIABLE_NAME % >
+	**/
+	//$scope.historyLog=<%- JSON.parse(JSON.stringify(historyLog)) %>;//这样写也行
+	$scope.historyLog=eval ("(" + JSON.stringify(<%-historyLog%>) + ")");
+	console.log('==>', typeof($scope.historyLog));
+});
+
+
+app.controller('yourCtrl', function($scope,$rootScope) {
+$scope.firstName= "boston";
+})
+
+
+//使用驼峰法来命名一个指令， runoobDirective, 但在使用它时需要以 - 分割, runoob-directive:
+app.directive("lvfeiDirective", function() {
+    return {
+		//restrict : "A",//通过添加 restrict 属性,并设置只值为 "A", 来设置指令只能通过属性的方式来调用:
+        template : "<font>自定义指令!</font>"
+    };
+});
+
+</script>	  
+   </head>
+	<body ng-app="myApp">
+	
+<div class="container" ng-controller="myCtrl">
+<div class="row" >
+	<div class="col-xs-6 col-sm-2" >
+		<p>{{NodejsMSG}}</p>
+		<ul class="nav nav-pills nav-stacked">
+		<li class="active"><a href="#">Home</a></li>
+		<li><a href="#">Create user</a></li>
+		<li><a href="#">User RPT</a></li>
+		<li><a href="#"><div lvfei-directive></div></a></li>
+		<li><a href="#">{{firstName}}</a></li>
+		</ul>
+	</div>	
+    <div class="col-xs-8 col-sm-8" >
+
+<div class="page-header">
+    <h1>Create new user
+        <small>please fill in all IFD</small>
+    </h1>
+</div>
+		
+		
+		<div class="row">	
+         <div class="thumbnail">
+		<div class="col-xs-6 col-sm-4" >	
 		<p>
-			<span>Name:</span>
-			<br>
-			<input id="name" name="name" type="text">
+		<img src="images/Desert.jpg" class="img-responsive img-circle" alt="响应式图像">
 		</p>
 		<p>
-			<span>Group:</span>
-			<br>
-			<input id="Ugroup" name="Ugroup" type="text">
+		<a href="/homePage" class="btn btn-primary" role="button">
+		Return home page
+		</a> 
 		</p>
-		<p><input type="submit" value="submit"></p>
+		</div>
+		
+		<div class="col-xs-6 col-sm-4" >	
+		<div class="caption">
+                <h3>Current user INFO</h3>
+		</div>
+		<p>
+		current user Name :<%=sessionUserINFO.currentUserName%>
+		<br/>
+		current user group :<%=sessionUserINFO.currentUserGroup%>
+		</p>
+		<address>
+		<strong>Current user company</strong><br>
+		<%=sessionUserINFO.company%><br>
+		<abbr title="CompanyPhone">P:</abbr> <%=sessionUserINFO.CompanyPhone%>
+		</address>
+		<address>
+		<strong><%=sessionUserINFO.FullName%></strong><br>
+		<a href="mailto:#"><%=sessionUserINFO.mailto%></a>
+		</address>	
+		</div>		 
+		</div>
+		</div>
+		
+<div class="row" >
+	<form action="http://127.0.0.1:3001/process_get" method="GET" role="form" class="form-horizontal" name="lvfeiForm">
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">聚焦</label>
+    <div class="col-sm-4">
+      <input class="form-control" id="focusedInput" type="text" value="该输入框获得焦点..." ng-model="firstName">
+    </div>
+	    <div class="col-sm-4">
+		<p class="form-control-static">{{firstName}}</p>
+    </div>
+  </div>	
+	
+  <div class="form-group">
+    <label for="country" class="col-sm-2 control-label">Country</label>
+	 <div class="col-sm-10">
+    <p class="form-control-static" id="country">China</p>
+	</div>
+  </div>	
+	
+
+  <div class="form-group">
+    <label for="name" class="col-sm-2 control-label">Name</label>
+	 <div class="col-sm-10">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <input type="checkbox"></span>
+                    <input type="text" class="form-control" id="name" placeholder="请输入名称"  ng-model="UserName" required>
+                </div><!-- /input-group -->	 
+	</div>
+  </div>	
+
+  <div class="form-group">
+    <label for="inputpassword" class="col-sm-2 control-label">Pass word</label>
+	 <div class="col-sm-10">
+    <input type="password" class="form-control" id="inputpassword" placeholder="请输入密码">
+	</div>
+  </div>
+  
+  <div class="form-group">
+    <label for="GroupLB" class="col-sm-2 control-label">GroupLB</label>
+	<div class="col-sm-10">
+		<select onchange="tmpJS(this)" id="Ugroup" name="Ugroup" class="form-control">	
+		<option value=""></option>		
+		<% for(var i=0;i<allUserGroup.length;i++){ %> 
+		<option value="<%= allUserGroup[i] %>"><%= allUserGroup[i] %></option>
+		<% } %> 
+		</select>
+	</div>
+	</div>
+
+	<div class="form-group">
+	<label for="Email" class="col-sm-2 control-label">Email</label>
+	<div class="col-sm-10">
+	<input type="email" class="form-control" name="Email" ng-model="email" placeholder="请输入名称" required>
+	<span ng-show="lvfeiForm.Email.$error.email" class="bg-danger">Email format invalidate!{{lvfeiForm.Email.$valid}}</span>
+	</div>
+	</div>
+
+    <div class="form-group">
+    <label for="Company" class="col-sm-2 control-label">Company</label>
+	<div class="col-sm-10">
+    <input type="text" class="form-control" id="Company" placeholder="请输入名称">
+	</div>
+	</div>
+	
+    <div class="form-group">
+    <label for="Phone" class="col-sm-2 control-label">Phone</label>
+	<div class="col-sm-10">
+    <input type="text" class="form-control" id="Phone" placeholder="请输入名称">
+	</div>
+	</div>
+ 
+ 
+    <div class="form-group">
+    <label for="Insterest" class="col-sm-2 control-label">Insterest</label>
+	<div class="col-sm-10 checkbox">
+	<div class="input-group">	
+		<span class="checkbox-inline">
+		<input type="checkbox" id="Insterest1" value="eat">Eat
+		</span>
+		<span class="checkbox-inline">
+		<input type="checkbox" id="Insterest2" value="read">Read book
+		</span>
+	</div>
+	</div>
+	</div>
+
+	
+	<div class="form-group">
+	<label for="Sex" class="col-sm-2 control-label">Sex</label>
+	<div class="col-sm-10 radio">
+		<label class="checkbox-inline">
+		<input type="radio" name="Sex" id="Sex1" value="male" checked>Man
+		</label>
+		<label class="checkbox-inline">
+		<input type="radio" name="Sex" id="Sex2" value="famale">Woman
+		</label>
+	</div>
+	</div>
+
+    <div class="form-group">
+    <label for="salary" class="col-sm-2 control-label">Salary</label>
+	<div class="col-sm-10">
+        <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <input type="text" class="form-control">
+            <span class="input-group-addon">.00</span>
+        </div>
+	</div>
+	</div>	
+
+	
+    <div class="form-group">
+    <label for="xxxx" class="col-sm-2 control-label">xxx</label>
+	<div class="col-sm-10 has-error">
+    <input type="text" class="form-control" id="xxxx" placeholder="请输入名称">
+	</div>
+	</div>
+ 
+    <div class="form-group">
+    <label for="userDES" class="col-sm-2 control-label">User description:</label>
+	<div class="col-sm-10">
+    <textarea class="form-control" id="userDES" rows="3"></textarea> 
+	</div>
+	</div> 
+
+	<div class="form-group">
+    <label for="inputPassword" class="col-sm-2 control-label">禁用</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="disabledInput" type="text" placeholder="该输入框禁止输入..." disabled>
+    </div>
+	</div>
+	
+	<fieldset disabled>
+		<div class="form-group">
+		  <label for="disabledTextInput" class="col-sm-2 control-label">禁用输入（Fieldset disabled）</label>
+		  <div class="col-sm-10">
+			<input type="text" id="disabledTextInput" class="form-control" placeholder="禁止输入">
+		  </div>
+		</div>
+		
+		<div class="form-group">
+		  <label for="disabledSelect" class="col-sm-2 control-label">禁用选择菜单（Fieldset disabled）</label>
+		  <div class="col-sm-10">
+			<select id="disabledSelect" class="form-control">
+			  <option>禁止选择</option>
+			</select>
+		  </div>
+		</div>
+	</fieldset>	
+	
+	<span>帮助文本实例</span>
+	<span class="help-block">一个较长的帮助文本块，超过一行，需要扩展到下一行。本实例中的帮助文本总共有两行。</span>
+	
+<div class="form-group"> 
+<div class="col-sm-10">	
+<button type="button" class="btn btn-primary btn-lg" style="color: rgb(212, 106, 64);">
+  <span class="glyphicon glyphicon-user"></span> Create new user
+</button>
+</div>
+</div>
+
 </form>
-</body>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">History log</h3>
+    </div>
+<table class="table">
+  <caption></caption>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>User</th>
+      <th>Comments</th></tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="log in historyLog">
+<td>{{log.Date}}</td><td>{{log.User}}</td><td>{{log.Comments}}</td>
+  </tr>
+  </tbody>
+</table>
+</div>	
+
+</div>	
+
+
+</div>		
+</div>
+
+
+
+
+
+</div>
+	
+
+
+
+<div class="container" ng-controller="yourCtrl">
+
+{{country+"的"+firstName}}
+
+
+	<p>
+	<abbr title="这就是一堆废话其实就为了为测试这个tag是不是好用">废话一堆</abbr>
+	</p>	
+
+	<h1>下面是一些不常用的实例</h1>
+	<h2>代码</h2>
+	<p>使用 kbd 元素表示按键输入:</p>
+	<p>使用 <kbd>ctrl + p</kbd> 来打开打印窗口。</p>
+
+	<h2>实例</h2>
+	<p> .caret 类显示了一个下拉的功能: <span class="caret"></span></p>
+	<p> .caret 类在按钮中使用：</p>
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Menu <span class="caret"></span></button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="#">一个链接</a></li>
+			<li><a href="#">另一个链接 link</a></li>
+			<li><a href="#">其他功能</a></li>
+		</ul>
+	</div>        
+	
+	<label>下拉菜单是可切换的，是以列表格式显示链接的上下文菜单</label>
+	<div class="dropdown">
+		<button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">主题
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			<li role="presentation" class="dropdown-header">下拉菜单标题</li>
+			<li role="presentation">
+				<a role="menuitem" tabindex="-1" href="#">Java</a>
+			</li>
+			<li role="presentation">
+				<a role="menuitem" tabindex="-1" href="#">数据挖掘</a>
+			</li>
+			<li role="presentation">
+				<a role="menuitem" tabindex="-1" href="#">数据通信/网络</a>
+			</li>
+			<li role="presentation" class="divider"></li>
+			<li role="presentation" class="dropdown-header">下拉菜单标题</li>
+			<li role="presentation">
+				<a role="menuitem" tabindex="-1" href="#">分离的链接</a>
+			</li>
+		</ul>
+	</div>	
+	<div class="alert alert-danger alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert"
+			aria-hidden="true">
+		&times;
+	</button>
+	错误！请进行一些更改。
+	</div>
+<p>
+<h3> Bootstrap 面板（Panels）。面板组件用于把 DOM 组件插入到一个盒子中。创建一个基本的面板，只需要向  div 元素添加 class .panel 和 class .panel-default 即可</h3>
+</p>	
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h3 class="panel-title">面板标题</h3>
+		</div>
+		<div class="panel-body">
+			这是一个基本的面板
+		</div>
+	</div>
+	<div class="panel panel-success">
+		<div class="panel-heading">
+			<h3 class="panel-title">面板标题</h3>
+		</div>
+		<div class="panel-body">
+			这是一个基本的面板
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h3 class="panel-title">面板标题</h3>
+		</div>
+		<div class="panel-body">
+			这是一个基本的面板
+		</div>
+	</div>
+	<div class="panel panel-warning">
+		<div class="panel-heading">
+			<h3 class="panel-title">面板标题</h3>
+		</div>
+		<div class="panel-body">
+			这是一个基本的面板
+		</div>
+	</div>
+	<div class="panel panel-danger">
+		<div class="panel-heading">
+			<h3 class="panel-title">面板标题</h3>
+		</div>
+		<div class="panel-body">
+			这是一个基本的面板
+		</div>
+	</div>		
+</div>	
+	
+
+
+
+	</body>
 </html>
+
+
+<script>
+function tmpJS(obj){alert(obj.value);}
+</script>
+

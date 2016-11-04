@@ -5,7 +5,9 @@ var userScheMa = new Schema({
 	name: String,
 	password: String,
 	Ugroup: String,
-	tmpcol: String
+	Company: String,
+	CompanyPhone: String,
+	Email: String
 }); //  定义了一个新的模型，但是此模式还未和users集合有关联
 //这里我犯过严重的错误，卡了两天
 /*
