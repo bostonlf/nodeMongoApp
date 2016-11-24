@@ -166,7 +166,7 @@ router.get('/UserRPT', function (req, res) {
 //JSON.stringify(persons)
 
 /**将页面值写入DB**/
-router.get('/process_get', function (req, res) {
+router.get('/saveUser', function (req, res) {
 	// 输出 JSON 格式
 				/*
 	name: String,
@@ -518,6 +518,18 @@ exports.modify = function (req, res) {
 
 /**some test (not useless)**/
 
+//这个用法很好，用来提交给自己
+router.get('/:username/:id', function (req, res, next) {
+	res.send('Request Type:', req.method+"@"+req.params.username+"@"+req.params.id);
+});
+
+router.get('/user2/:id', function (req, res, next) {
+	console.log('ID2:', req.params.id);
+	next();
+}, function (req, res, next) {
+	res.send('User Info');
+});
+
 //这样写可以指定一个路径的文件  貌似指定的只能是app根目录下 不会改成指定文件夹的
 router.get('/runoob_index.htm', function (req, res) {
 	res.sendFile(__dirname + "/" + "runoob_index.html"); //这时的 __dirname 是当前文件 index.js所在的目录
@@ -540,16 +552,6 @@ router.get(/.*fly$/, function (req, res) {
 	});
 
 
-router.get('/user/:id', function (req, res, next) {
-	res.send('USER');
-});
-
-router.get('/user2/:id', function (req, res, next) {
-	console.log('ID2:', req.params.id);
-	next();
-}, function (req, res, next) {
-	res.send('User Info');
-});
 
 
 

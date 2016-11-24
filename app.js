@@ -47,12 +47,6 @@ end*/
 
 /**中间件 start**/
 
-app.use('/user/:id', function (req, res, next) {
-  console.log('Request Type:', req.method);
-  next();//如果当前中间件没有终结请求-响应循环，则必须调用 next() 方法将控制权交给下一个中间件，否则请求就会挂起。
-});
-
-
 
 /**这个不好用，不知道为什么**
 app.use('/user/qq', function(req, res, next) {
